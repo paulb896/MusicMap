@@ -1,4 +1,5 @@
-== Music Organizer ==
+Music Organizer
+===================
 
 Uses mediainfo to extract song data.
 
