@@ -2,7 +2,7 @@
 
 namespace filehelpers\File;
 
-use filehelpers\FileInterface;
+use \filehelpers\FileInterface;
 
 class Model implements FileInterface
 {

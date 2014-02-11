@@ -1,8 +1,8 @@
 <?php
 
-namespace filehelpers;
+namespace filehelpers\File;
 
-use filehelpers\File;
+use \filehelpers\File\Model;
 
 /**
  * Loading file data.
@@ -18,7 +18,7 @@ class ModelFactory
      */
     public function getFile($filePath)
     {
-        $file = new File();
+        $file = new Model();
         $file->setPath($filePath);
         return $file;
     }

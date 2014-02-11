@@ -2,7 +2,7 @@
 
 namespace filehelpers\File;
 
-use filehelpers\FileInterface;
+use \filehelpers\FileInterface;
 
 class Actions
 {
@@ -12,7 +12,7 @@ class Actions
      * @param FileInterface $file
      * @param string $destinationPath
      */
-    public function copyFileToPath(FileInterface $file, $destinationPath)
+    public function copy(FileInterface $file, $destinationPath)
     {
         copy($file->getPath(), $destinationPath);
     }

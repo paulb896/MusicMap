@@ -7,7 +7,8 @@ namespace filehelpers;
  *
  * @package filehlpers
  */
-interface FileInterface{
+interface FileInterface
+{
    public function getPath();
    public function setPath($filePath);
 }

@@ -2,7 +2,7 @@
 
 use filehelpers\Metadata;
 
-class MetadataLoaderTest
+class MetadataLoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Verify metadata loading functionality.

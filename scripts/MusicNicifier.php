@@ -9,36 +9,51 @@ namespace scripts;
  */
 class MusicNicifier
 {
+    protected $metadataGroupByName;
+    protected $baseDirectory;
+
     /**
      * Instances of external helper objects.
      *
      * @type array
      */
-    protected $helpers = [
+    public $helperObjects = [
         'songMover' => '',
         'songLoader' => '',
-        'metaDataLoader' => ''
+        'fileFactory' => '',
+        'metadataLoader' => ''
     ];
 
     /**
-     * @type array
+     * @param string $inputDirectory
+     * @param string $metadataGroupKey
+     * @param null (optional) $metadataScriptPath
      */
-    protected $validCommandLineArguments = [];
+    public function organizeSongsByMetadata($inputDirectory, $metadataGroupKey, $metadataScriptPath = null)
+    {
+        $this->setBaseDirectory($inputDirectory);
+
+        $this->setMetadataGroupKey($metadataGroupKey);
+
+        if (!is_null($metadataScriptPath)) {
+            $this->helperObjects['metadataLoader']->pathToMediaInfo = $metadataScriptPath;
+        }
+
+        $songs = $this->helperObjects['songLoader']->getFiles($inputDirectory);
+
+        $this->moveSongs($songs);
+    }
 
     /**
-     * @param array $commandLineArguments
+     * @param string $metadataName
      */
-    public function execute($commandLineArguments)
+    public function setMetadataGroupKey($metadataName)
     {
-        if (array_key_exists('inputDir', $commandLineArguments)) {
-            $this->setBaseDirectory($commandLineArguments['inputDir']);
+        if (is_string($metadataName)
+            && strlen($metadataName) > 3
+        ) {
+            $this->metadataGroupByName = $metadataName;
         }
-
-        if (array_key_exists('metadataScriptPath', $commandLineArguments)) {
-            $this->helpers['metaDataLoader']->pathToMediaInfo = $commandLineArguments['metadataScriptPath'];
-        }
-
-        //$this->moveSongs()
     }
 
     /**
@@ -54,23 +69,56 @@ class MusicNicifier
         }
     }
 
-    public function getSongDestinationPath($testFile)
+    public function getDirectoryName($file)
     {
-        $this->helpers['metaDataLoader']->loadMetadata($testFile);
-        //return $testF
+        if (!array_key_exists($this->metadataGroupByName, $file->metadata)) {
+            throw new \Exception('Incomplete file metadata');
+        }
+        return $file->metadata[$this->metadataGroupByName];
+    }
+
+    public function getTrackName($file)
+    {
+        if (!array_key_exists('Track name', $file->metadata)) {
+            throw new \Exception('Incomplete file metadata');
+        }
+        return $file->metadata['Track name'];
     }
 
     /**
-     *
+     * @param string $file
+     * @throws \Exception On invalid metadata (indirectly)
+     * @return string
+     */
+    public function getSongDestinationPath($file)
+    {
+        $extension = '.mp3';
+        return $this->getDirectoryName($file)
+            . DIRECTORY_SEPARATOR
+            . str_replace(' ', '_', $this->getTrackName($file))
+            . $extension;
+    }
+
+    /**
+     * @param array $songs
      */
     public function moveSongs($songs)
     {
         foreach($songs as $song) {
-            $songFile = $this->helpers['songLoader']->loadFile($song);
-            $destinationPath = $this->getSongDestinationPath($songFile);
-            $this->helpers['songMover']->copyFileToPath($songFile, $destinationPath);
+            $songFile = $this->helperObjects['fileFactory']->getFile($song);
+            try {
+                $this->helperObjects['metadataLoader']->loadMetadata($songFile);
+                $destinationPath = $this->getSongDestinationPath($songFile);
+            } catch (\Exception $e) {
+                continue;
+            }
+
+            $directoryName = $this->getDirectoryName($songFile);
+            if (!is_dir($directoryName)) {
+                mkdir($directoryName);
+            }
+            $this->helperObjects['songMover']->copy($songFile, $destinationPath);
         }
     }
-
-    protected $baseDirectory;
 }
+

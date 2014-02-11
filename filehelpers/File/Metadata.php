@@ -2,7 +2,7 @@
 
 namespace filehelpers\File;
 
-use filehelpers\FileInterface;
+use \filehelpers\FileInterface;
 
 /**
  * Loading metadata for file.
@@ -23,11 +23,6 @@ class Metadata
      */
     public function loadMetadata(FileInterface $file)
     {
-
-        // // var_dump($command);
-        // // return;
-
-        // var_dump($rawMetadata);
         $file->metadata = $this->getMetadataUsingScript($file);
         return $file;
     }

@@ -1,6 +1,8 @@
 <?php
 
-class MediaCopyTest
+namespace tests\filehelpers;
+
+class MediaCopyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Verify file copying functionality.
