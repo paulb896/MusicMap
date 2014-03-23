@@ -16,6 +16,5 @@ class MetadataLoaderTest extends PHPUnit_Framework_TestCase
         $testFile = $fileLoader->loadFile($fileName);
         $loader = new MetadataLoader();
         $loader->loadMetadata($testFile);
-        //print_r($testFile->metadata);
     }
 }

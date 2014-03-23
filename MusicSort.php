@@ -1,12 +1,8 @@
 <?php
 
-require_once 'filehelpers\FileInterface.php';
-require_once 'filehelpers\File\Actions.php';
-require_once 'filehelpers\Directory\Listing.php';
-require_once 'filehelpers\File\Metadata.php';
-require_once 'filehelpers\File\Model.php';
-require_once 'filehelpers\File\ModelFactory.php';
-require_once 'scripts\MusicNicifier.php';
+namespace MusicSort;
+
+require_once 'autoload.php';
 
 echo "Usage: php MusicSort.php <inputDirectory> <outputDirectory> <groupByType> [pathToMediaInfo]" . PHP_EOL;
 echo "Example: php MusicSort.php C:\Users\Paul\Music C:\Users\Paul\OrganizedMusic Performer C:\Programs\MediaInfo.exe" . PHP_EOL;
@@ -28,3 +24,4 @@ if ($argv) {
 
     $musicNicifier->organizeSongsByMetadata($inputDirectory, $outputDirectory, $groupKey);
 }
+

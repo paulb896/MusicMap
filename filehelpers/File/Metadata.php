@@ -34,10 +34,17 @@ class Metadata
     protected function getMetadataUsingScript(FileInterface $file)
     {
         $metadata = [];
-        $command = "$this->pathToMediaInfo " . '"' . $file->getPath() . '"';
-        exec($command, $dataLines);
+        $command = $this->pathToMediaInfo . ' "' . $file->getPath() . '"';
+        exec($command, $dataLines, $errorStatus);
+        if ($errorStatus) {
+            return [];
+        }
+
         foreach ($dataLines as $line) {
             $keyAndData = explode(":", $line);
+            if (count($keyAndData) != 2) {
+                continue;
+            }
             $metadata[trim($keyAndData[0])] = trim($keyAndData[1]);
         }
 

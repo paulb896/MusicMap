@@ -27,8 +27,9 @@ class MusicNicifier
 
     /**
      * @param string $inputDirectory
+     * @param string $outputDirectory
      * @param string $metadataGroupKey
-     * @param null (optional) $metadataScriptPath
+     * @param mixed $metadataScriptPath
      */
     public function organizeSongsByMetadata($inputDirectory, $outputDirectory, $metadataGroupKey, $metadataScriptPath = null)
     {
