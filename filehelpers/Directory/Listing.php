@@ -11,23 +11,9 @@ class Listing
      */
     public function getFiles($directoryPath, $recursivelySearchDirectory = false)
     {
-            $files = [];
-            if ($handle = opendir($directoryPath)) {
-                while (false !== ($fileName = readdir($handle))) {
-                    if (
-                        (strlen($fileName) > 3)
-                        && is_dir($fileName)
-                        && $recursivelySearchDirectory
-                    ) {
-                        $files += $this->getFiles($fileName, $recursivelySearchDirectory);
-                    }
-                if (strpos($fileName, '.mp3')) {
-                    $files []= $fileName;
-                }
-            }
-            closedir($handle);
-        }
-
-        return $files;
+        $Directory = new \RecursiveDirectoryIterator($directoryPath);
+        $Iterator = new \RecursiveIteratorIterator($Directory);
+        $Regex = new \RegexIterator($Iterator, '/^.+\.mp3$/i', \RecursiveRegexIterator::GET_MATCH);
+        return array_keys(iterator_to_array($Regex));;
     }
 }

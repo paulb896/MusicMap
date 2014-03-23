@@ -34,7 +34,7 @@ class Metadata
     protected function getMetadataUsingScript(FileInterface $file)
     {
         $metadata = [];
-        $command = "$this->pathToMediaInfo " . $file->getPath();
+        $command = "$this->pathToMediaInfo " . '"' . $file->getPath() . '"';
         exec($command, $dataLines);
         foreach ($dataLines as $line) {
             $keyAndData = explode(":", $line);

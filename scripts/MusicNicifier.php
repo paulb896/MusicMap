@@ -10,7 +10,8 @@ namespace scripts;
 class MusicNicifier
 {
     protected $metadataGroupByName;
-    protected $baseDirectory;
+    protected $inputDirectory;
+    protected $outputDirectory;
 
     /**
      * Instances of external helper objects.
@@ -29,9 +30,10 @@ class MusicNicifier
      * @param string $metadataGroupKey
      * @param null (optional) $metadataScriptPath
      */
-    public function organizeSongsByMetadata($inputDirectory, $metadataGroupKey, $metadataScriptPath = null)
+    public function organizeSongsByMetadata($inputDirectory, $outputDirectory, $metadataGroupKey, $metadataScriptPath = null)
     {
         $this->setBaseDirectory($inputDirectory);
+        $this->outputDirectory = $outputDirectory;
 
         $this->setMetadataGroupKey($metadataGroupKey);
 
@@ -39,7 +41,7 @@ class MusicNicifier
             $this->helperObjects['metadataLoader']->pathToMediaInfo = $metadataScriptPath;
         }
 
-        $songs = $this->helperObjects['songLoader']->getFiles($inputDirectory);
+        $songs = $this->helperObjects['songLoader']->getFiles($inputDirectory, true);
 
         $this->moveSongs($songs);
     }
@@ -62,10 +64,23 @@ class MusicNicifier
      * @param string $baseDirectory
      * @throws \Exception On invalid directory.
      */
+    public function setOutputDirectory($baseDirectory)
+    {
+        if (is_dir($baseDirectory)) {
+            $this->inputDirectory = $baseDirectory;
+        }
+    }
+
+    /**
+     * Set valid directory.
+     *
+     * @param string $baseDirectory
+     * @throws \Exception On invalid directory.
+     */
     public function setBaseDirectory($baseDirectory)
     {
         if (is_dir($baseDirectory)) {
-            $this->baseDirectory = $baseDirectory;
+            $this->inputDirectory = $baseDirectory;
         }
     }
 
@@ -93,7 +108,9 @@ class MusicNicifier
     public function getSongDestinationPath($file)
     {
         $extension = '.mp3';
-        return $this->getDirectoryName($file)
+        return $this->outputDirectory
+            . DIRECTORY_SEPARATOR
+            . $this->getDirectoryName($file)
             . DIRECTORY_SEPARATOR
             . str_replace(' ', '_', $this->getTrackName($file))
             . $extension;
@@ -113,7 +130,7 @@ class MusicNicifier
                 continue;
             }
 
-            $directoryName = $this->getDirectoryName($songFile);
+            $directoryName = $this->outputDirectory . DIRECTORY_SEPARATOR . $this->getDirectoryName($songFile);
             if (!is_dir($directoryName)) {
                 mkdir($directoryName);
             }
