@@ -5,6 +5,7 @@ Uses mediainfo to extract song data.
 MusicSort copies all files from the input directory, to a path based on desired metadata.
 Currently only copies mp3 file types.
 
+## Example Case
 
 For example, running the command:
 
@@ -34,7 +35,8 @@ would be copied to:
 ```
 
 
-== Usage ==
+# Usage
+
 ```
   php MusicSort\MusicSort.php <pathToMusicDirectory> <sortedMusicDestination> <folderGroupMetadataKey> [mediaInfoLocation.exe]
 ```
