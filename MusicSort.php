@@ -9,7 +9,7 @@ require_once 'filehelpers\File\ModelFactory.php';
 require_once 'scripts\MusicNicifier.php';
 
 echo "Usage: php MusicSort.php <inputDirectory> <outputDirectory> <groupByType> [pathToMediaInfo]" . PHP_EOL;
-echo "Example (Default MediaInfoLocation): php MusicSort.php C:\Users\Paul\Music C:\Users\Paul\OrganizedMusic Performer" . PHP_EOL;
+echo "Example: php MusicSort.php C:\Users\Paul\Music C:\Users\Paul\OrganizedMusic Performer C:\Programs\MediaInfo.exe" . PHP_EOL;
 
 if ($argv) {
     $inputDirectory = $argv[1];

@@ -10,5 +10,5 @@ Usage
 
 Example Usage - Sort music in current directory by performer (aka Artist).
 ```
-  php MusicSort\MusicSort.php C:\Music C:\OrganizedMusic Performer
+  php MusicSort\MusicSort.php C:\Music C:\OrganizedMusic Performer C:\Programs\MediaInfo.exe
 ```
